@@ -20,6 +20,7 @@ if let controller = navController.visibleViewController as? ImageSlideShowViewCo
 {
 	controller.dismissOnPanGesture = true
 	controller.slides = self.images
+	controller.enableZoom = true
 	
 	self.presentViewController(navController, animated: true, completion: nil)
 }
