@@ -26,6 +26,6 @@ extension UIPageViewController
 	
 	func setScrollEnabled(enabled:Bool)
 	{
-		self.scrollView()?.scrollEnabled = enabled
+		scrollView()?.scrollEnabled = enabled
 	}
 }

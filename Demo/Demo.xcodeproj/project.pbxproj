@@ -16,6 +16,7 @@
 		4707EA541DB395F900DCDA5F /* ImageSlideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4707EA4E1DB395F900DCDA5F /* ImageSlideViewController.swift */; };
 		4707EA551DB395F900DCDA5F /* UIPageViewController+ImageSlideShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4707EA501DB395F900DCDA5F /* UIPageViewController+ImageSlideShow.swift */; };
 		4707EA561DB395F900DCDA5F /* ImageSlideShow.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4707EA521DB395F900DCDA5F /* ImageSlideShow.storyboard */; };
+		47726AA81DC1F1D300835E1F /* ImageSlideShowNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47726AA71DC1F1D300835E1F /* ImageSlideShowNavigationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		4707EA4E1DB395F900DCDA5F /* ImageSlideViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSlideViewController.swift; sourceTree = "<group>"; };
 		4707EA501DB395F900DCDA5F /* UIPageViewController+ImageSlideShow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+ImageSlideShow.swift"; sourceTree = "<group>"; };
 		4707EA521DB395F900DCDA5F /* ImageSlideShow.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ImageSlideShow.storyboard; sourceTree = "<group>"; };
+		47726AA71DC1F1D300835E1F /* ImageSlideShowNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSlideShowNavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 			children = (
 				4707EA4D1DB395F900DCDA5F /* ImageSlideShowViewController.swift */,
 				4707EA4E1DB395F900DCDA5F /* ImageSlideViewController.swift */,
+				47726AA71DC1F1D300835E1F /* ImageSlideShowNavigationController.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -182,6 +185,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47726AA81DC1F1D300835E1F /* ImageSlideShowNavigationController.swift in Sources */,
 				4707EA541DB395F900DCDA5F /* ImageSlideViewController.swift in Sources */,
 				4707EA3C1DB3959800DCDA5F /* ViewController.swift in Sources */,
 				4707EA551DB395F900DCDA5F /* UIPageViewController+ImageSlideShow.swift in Sources */,
@@ -348,6 +352,7 @@
 				4707EA4A1DB3959800DCDA5F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

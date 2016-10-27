@@ -65,9 +65,9 @@ class ViewController: UIViewController {
 		
 		images = [
 			Image(url: NSURL(string: "https://dummyimage.com/\(width)x\(height)/09a/fff.png&text=Image+1")!),
-			Image(url: NSURL(string: "https://dummyimage.com/\(width)x\(height)/09b/fff.png&text=Image+2")!),
+			Image(url: NSURL(string: "https://dummyimage.com/\(600)x\(600)/09b/fff.png&text=Image+2")!),
 			Image(url: NSURL(string: "https://dummyimage.com/\(width)x\(height)/09c/fff.png&text=Image+3")!),
-			Image(url: NSURL(string: "https://dummyimage.com/\(width)x\(height)/09d/fff.png&text=Image+4")!),
+			Image(url: NSURL(string: "https://dummyimage.com/\(600)x\(600)/09d/fff.png&text=Image+4")!),
 			Image(url: NSURL(string: "https://dummyimage.com/\(width)x\(height)/09e/fff.png&text=Image+5")!),
 			Image(url: NSURL(string: "https://dummyimage.com/\(width)x\(height)/09f/fff.png&text=Image+6")!),
 		]
@@ -80,6 +80,7 @@ class ViewController: UIViewController {
 		{
 			controller.dismissOnPanGesture = true
 			controller.slides = self.images
+			controller.enableZoom = true
 			
 			self.presentViewController(navController, animated: true, completion: nil)
 		}

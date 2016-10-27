@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -9,17 +9,17 @@
         <!--Image Slide Show View Controller-->
         <scene sceneID="SP8-jp-pdT">
             <objects>
-                <pageViewController storyboardIdentifier="ImageSlideShowViewController" autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" pageSpacing="10" navigationOrientation="horizontal" spineLocation="none" id="qyz-oM-rqY" customClass="ImageSlideShowViewController" customModule="SegnalaNet" customModuleProvider="target" sceneMemberID="viewController">
+                <pageViewController storyboardIdentifier="ImageSlideShowViewController" autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" pageSpacing="10" navigationOrientation="horizontal" spineLocation="none" id="qyz-oM-rqY" customClass="ImageSlideShowViewController" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="0YM-cN-H4F"/>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mNC-Yc-kYH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="87" y="-319"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Image Slide Show Navigation Controller-->
         <scene sceneID="SB8-aY-Yrd">
             <objects>
-                <navigationController storyboardIdentifier="ImageSlideShowNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="PJ3-gM-bi3" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ImageSlideShowNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="PJ3-gM-bi3" customClass="ImageSlideShowNavigationController" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="bdJ-bZ-9av">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -35,7 +35,7 @@
         <!--Image Slide View Controller-->
         <scene sceneID="xZc-65-CeH">
             <objects>
-                <viewController storyboardIdentifier="ImageSlideViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ac2-3e-xTy" customClass="ImageSlideViewController" customModule="SegnalaNet" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ImageSlideViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ac2-3e-xTy" customClass="ImageSlideViewController" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MJ6-VH-Jjs"/>
                         <viewControllerLayoutGuide type="bottom" id="P3f-r7-4bc"/>
@@ -44,30 +44,46 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IB1-fE-kMh">
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                            </imageView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EIs-p7-gMV">
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IB1-fE-kMh">
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="IB1-fE-kMh" firstAttribute="top" secondItem="EIs-p7-gMV" secondAttribute="top" id="1b6-mE-Sro"/>
+                                    <constraint firstItem="IB1-fE-kMh" firstAttribute="centerX" secondItem="EIs-p7-gMV" secondAttribute="centerX" id="9Kd-Ah-ErO"/>
+                                    <constraint firstItem="IB1-fE-kMh" firstAttribute="centerY" secondItem="EIs-p7-gMV" secondAttribute="centerY" id="KJW-3h-fGO"/>
+                                    <constraint firstItem="IB1-fE-kMh" firstAttribute="leading" secondItem="EIs-p7-gMV" secondAttribute="leading" id="SS8-EM-zyU"/>
+                                    <constraint firstAttribute="bottom" secondItem="IB1-fE-kMh" secondAttribute="bottom" id="TT6-LE-DUo"/>
+                                    <constraint firstAttribute="trailing" secondItem="IB1-fE-kMh" secondAttribute="trailing" id="fS2-V5-2Ai"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="ac2-3e-xTy" id="TmW-tT-GfK"/>
+                                </connections>
+                            </scrollView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="cmx-69-4Vi"/>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="P3f-r7-4bc" firstAttribute="top" secondItem="EIs-p7-gMV" secondAttribute="bottom" id="0RG-Sd-Zth"/>
+                            <constraint firstItem="EIs-p7-gMV" firstAttribute="top" secondItem="rX4-OF-GMN" secondAttribute="top" id="24a-ig-IyD"/>
+                            <constraint firstAttribute="trailing" secondItem="EIs-p7-gMV" secondAttribute="trailing" id="Rte-Pd-CZ3"/>
                             <constraint firstItem="cmx-69-4Vi" firstAttribute="centerY" secondItem="rX4-OF-GMN" secondAttribute="centerY" id="X1U-pq-oPe"/>
-                            <constraint firstItem="IB1-fE-kMh" firstAttribute="top" secondItem="rX4-OF-GMN" secondAttribute="top" id="efE-gW-3JY"/>
+                            <constraint firstItem="EIs-p7-gMV" firstAttribute="leading" secondItem="rX4-OF-GMN" secondAttribute="leading" id="Zqd-eO-Zs0"/>
                             <constraint firstItem="cmx-69-4Vi" firstAttribute="centerX" secondItem="rX4-OF-GMN" secondAttribute="centerX" id="ggs-d0-ZsN"/>
-                            <constraint firstItem="P3f-r7-4bc" firstAttribute="top" secondItem="IB1-fE-kMh" secondAttribute="bottom" id="rf3-Zm-8wW"/>
-                            <constraint firstItem="IB1-fE-kMh" firstAttribute="leading" secondItem="rX4-OF-GMN" secondAttribute="leading" id="wOk-H9-NMw"/>
-                            <constraint firstAttribute="trailing" secondItem="IB1-fE-kMh" secondAttribute="trailing" id="ywa-Sn-p8O"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="7re-U1-FeW"/>
                     <connections>
                         <outlet property="imageView" destination="IB1-fE-kMh" id="OLq-bh-Fko"/>
                         <outlet property="loadingIndicatorView" destination="cmx-69-4Vi" id="zb3-wi-pay"/>
+                        <outlet property="scrollView" destination="EIs-p7-gMV" id="lHh-XG-miZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AbK-do-KjR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="790" y="-319"/>
+            <point key="canvasLocation" x="789.60000000000002" y="-319.79010494752629"/>
         </scene>
     </scenes>
 </document>
