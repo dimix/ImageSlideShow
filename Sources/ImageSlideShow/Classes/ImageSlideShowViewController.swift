@@ -13,16 +13,10 @@ import UIKit
 	func image(completion: (image:UIImage?, error:NSError?) -> Void)
 }
 
-protocol ImageSlideShowViewControllerDelegate
-{
-	func imageSlideShowViewControllerDidDismiss(controller:ImageSlideShowViewController)
-}
-
 class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate
 {
 	static var imageSlideShowStoryboard:UIStoryboard = UIStoryboard(name: "ImageSlideShow", bundle: nil)
 	
-	var imageSlideShowDelegate:ImageSlideShowViewControllerDelegate?
 	var slides:[ImageSlideShowProtocol]?
 	var initialIndex:Int = 0
 	var pageSpacing:CGFloat = 10.0
@@ -31,6 +25,8 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 	var enableZoom:Bool = false
 	var statusBarStyle:UIStatusBarStyle = .LightContent
 	var navigationBarTintColor:UIColor = .whiteColor()
+	
+	var controllerDidDismiss:() -> Void = {}
 	
 	private var pageViewControllerCenter = CGPointZero
 	private var navigationBarHidden = false
@@ -126,7 +122,7 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 	{
 		dismissViewControllerAnimated(true, completion: nil)
 		
-		imageSlideShowDelegate?.imageSlideShowViewControllerDidDismiss(self)
+		controllerDidDismiss()
 	}
 	
 	func goToPageIndex(index:Int)
@@ -270,7 +266,9 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 				guard let controller = storyboard?.instantiateViewControllerWithIdentifier("ImageSlideViewController") as? ImageSlideViewController else { fatalError("Unable to instantiate a ImageSlideViewController.") }
 				controller.slide = slide
 				controller.enableZoom = enableZoom
-				controller.delegate = self
+				controller.willBeginZoom = {
+					self.setNavigationBarVisible(false)
+				}
 				
 				slidesViewControllerCache.setObject(controller, forKey: slide.slideIdentifier())
 				
@@ -351,15 +349,5 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 		default:
 			break;
 		}
-	}
-}
-
-//	MARK: - ImageSlideViewControllerDelegate
-
-extension ImageSlideShowViewController:ImageSlideViewControllerDelegate
-{
-	func imageSlideViewControllerWillBeginZoom(controller: ImageSlideViewController)
-	{
-		self.setNavigationBarVisible(false)
 	}
 }

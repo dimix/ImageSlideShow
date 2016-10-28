@@ -81,6 +81,9 @@ class ViewController: UIViewController {
 			controller.dismissOnPanGesture = true
 			controller.slides = self.images
 			controller.enableZoom = true
+			controller.controllerDidDismiss = {
+				print("Controller Dismissed")
+			}
 			
 			self.presentViewController(navController, animated: true, completion: nil)
 		}

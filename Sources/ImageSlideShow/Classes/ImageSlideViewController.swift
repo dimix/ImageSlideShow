@@ -7,11 +7,6 @@
 
 import UIKit
 
-protocol ImageSlideViewControllerDelegate
-{
-	func imageSlideViewControllerWillBeginZoom(controller:ImageSlideViewController)
-}
-
 class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 {
 	@IBOutlet weak var scrollView:UIScrollView?
@@ -20,7 +15,8 @@ class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 	
 	var slide:ImageSlideShowProtocol?
 	var enableZoom = false
-	var delegate:ImageSlideViewControllerDelegate?
+	
+	var willBeginZoom:() -> Void = {}
 	
     override func viewDidLoad()
 	{
@@ -62,7 +58,7 @@ class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 	
 	func scrollViewWillBeginZooming(scrollView: UIScrollView, withView view: UIView?)
 	{
-		self.delegate?.imageSlideViewControllerWillBeginZoom(self)
+		willBeginZoom()
 	}
 	
 	func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView?
