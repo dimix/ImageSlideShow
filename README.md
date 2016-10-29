@@ -15,14 +15,15 @@ ImageSlideShow is a simple Slideshow for images (Picture, Photos) for your apps.
 #### 2. Instantiate the controller
 
 ```swift
-let navController = ImageSlideShowViewController.imageSlideShowNavigationController()
-if let controller = navController.visibleViewController as? ImageSlideShowViewController
-{
+ImageSlideShowViewController.presentFrom(self){ [weak self] controller in
+			
 	controller.dismissOnPanGesture = true
-	controller.slides = self.images
+	controller.slides = self?.images
 	controller.enableZoom = true
-	
-	self.presentViewController(navController, animated: true, completion: nil)
+	controller.controllerDidDismiss = {
+		print("Controller Dismissed")
+	}
+			
 }
 ```
 
@@ -34,5 +35,3 @@ You can use the Demo project to watch details.
 - Create module
 - Add CocoaPods and Carthage support
 - Create a Swift 3 version
-- Improve Instance creation
-- Improve ImageSlidehowProtocol
