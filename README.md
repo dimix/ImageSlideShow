@@ -3,7 +3,7 @@ A Swift Image SlideShow for iOS
 
 ImageSlideShow is a simple Slideshow for images (Picture, Photos) for your apps.
 
-![alt tag](https://github.com/dimix/ImageSlideShow/blob/master/demo.gif)
+![alt tag](https://raw.githubusercontent.com/dimix/ImageSlideShow/e6e9a62db2b4c82b58d5b298ef6802c0a8125970/demo.gif)
 
 ## Features
 - All in one slideshow with generic protocol to provide images directly from the model
