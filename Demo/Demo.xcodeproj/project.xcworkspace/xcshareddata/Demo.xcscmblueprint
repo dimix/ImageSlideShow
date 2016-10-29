@@ -1,18 +1,18 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "f268d18c-e996-4b29-9489-9c60d5e3f5bc++9718",
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "f268d18c-e996-4b29-9489-9c60d5e3f5bc++8055",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
-    "f268d18c-e996-4b29-9489-9c60d5e3f5bc++9718" : {
+    "f268d18c-e996-4b29-9489-9c60d5e3f5bc++8055" : {
 
     }
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "8710737E6E4F06ACEC4FC00188A330F26426543B" : 9223372036854775807,
-    "f268d18c-e996-4b29-9489-9c60d5e3f5bc++9718" : 9223372036854775807
+    "f268d18c-e996-4b29-9489-9c60d5e3f5bc++8055" : 9223372036854775807,
+    "8710737E6E4F06ACEC4FC00188A330F26426543B" : 9223372036854775807
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "715DBD8A-EB3F-4F34-8678-6695AAD93A4B",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "8710737E6E4F06ACEC4FC00188A330F26426543B" : "ImageSlideShow\/",
-    "f268d18c-e996-4b29-9489-9c60d5e3f5bc++9718" : ".."
+    "f268d18c-e996-4b29-9489-9c60d5e3f5bc++8055" : "..",
+    "8710737E6E4F06ACEC4FC00188A330F26426543B" : "ImageSlideShow\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "Demo",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -26,7 +26,7 @@
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/svn.dimitrigiani.it",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "f268d18c-e996-4b29-9489-9c60d5e3f5bc++9718"
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "f268d18c-e996-4b29-9489-9c60d5e3f5bc++8055"
     }
   ]
 }

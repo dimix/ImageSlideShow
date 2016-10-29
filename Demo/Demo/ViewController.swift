@@ -85,21 +85,6 @@ class ViewController: UIViewController {
 			}
 			
 		}
-		
-		/*
-		let navController = ImageSlideShowViewController.imageSlideShowNavigationController()
-		if let controller = navController.visibleViewController as? ImageSlideShowViewController
-		{
-			controller.dismissOnPanGesture = true
-			controller.slides = self.images
-			controller.enableZoom = true
-			controller.controllerDidDismiss = {
-				print("Controller Dismissed")
-			}
-			
-			self.presentViewController(navController, animated: true, completion: nil)
-		}
-		*/
 	}
 }
 
