@@ -72,9 +72,21 @@ class ViewController: UIViewController {
 			Image(url: NSURL(string: "https://dummyimage.com/\(width)x\(height)/09f/fff.png&text=Image+6")!),
 		]
 	}
-
+	
 	@IBAction func presentSlideShow(withSender sender:AnyObject?)
 	{
+		ImageSlideShowViewController.presentFrom(self){ [weak self] controller in
+			
+			controller.dismissOnPanGesture = true
+			controller.slides = self?.images
+			controller.enableZoom = true
+			controller.controllerDidDismiss = {
+				print("Controller Dismissed")
+			}
+			
+		}
+		
+		/*
 		let navController = ImageSlideShowViewController.imageSlideShowNavigationController()
 		if let controller = navController.visibleViewController as? ImageSlideShowViewController
 		{
@@ -87,6 +99,7 @@ class ViewController: UIViewController {
 			
 			self.presentViewController(navController, animated: true, completion: nil)
 		}
+		*/
 	}
 }
 

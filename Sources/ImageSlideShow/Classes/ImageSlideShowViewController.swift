@@ -13,6 +13,21 @@ import UIKit
 	func image(completion: (image:UIImage?, error:NSError?) -> Void)
 }
 
+class ImageSlideShowCache: NSCache
+{
+	override init()
+	{
+		super.init()
+		
+		NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(NSMutableArray.removeAllObjects), name: UIApplicationDidReceiveMemoryWarningNotification, object: nil)
+	}
+	
+	deinit
+	{
+		NSNotificationCenter.defaultCenter().removeObserver(self);
+	}
+}
+
 class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate
 {
 	static var imageSlideShowStoryboard:UIStoryboard = UIStoryboard(name: "ImageSlideShow", bundle: nil)
@@ -20,7 +35,7 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 	var slides:[ImageSlideShowProtocol]?
 	var initialIndex:Int = 0
 	var pageSpacing:CGFloat = 10.0
-	var panDismissTolerance:CGFloat = 100.0
+	var panDismissTolerance:CGFloat = 30.0
 	var dismissOnPanGesture:Bool = false
 	var enableZoom:Bool = false
 	var statusBarStyle:UIStatusBarStyle = .LightContent
@@ -28,11 +43,12 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 	
 	var controllerDidDismiss:() -> Void = {}
 	
-	private var pageViewControllerCenter = CGPointZero
+	private var originPanViewCenter = CGPointZero
+	private var panViewCenter = CGPointZero
 	private var navigationBarHidden = false
 	private var toggleBarButtonItem:UIBarButtonItem?
 	private var currentIndex = 0
-	private let slidesViewControllerCache = NSCache()
+	private let slidesViewControllerCache = ImageSlideShowCache()
 	
 	//	MARK: - Class methods
 	
@@ -52,6 +68,17 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 		controller.modalPresentationCapturesStatusBarAppearance = true
 		
 		return controller
+	}
+	
+	class func presentFrom(viewController:UIViewController, configure:((controller: ImageSlideShowViewController) -> ())?)
+	{
+		let navController = self.imageSlideShowNavigationController()
+		if let issViewController = navController.visibleViewController as? ImageSlideShowViewController
+		{
+			configure?(controller: issViewController)
+			
+			viewController.presentViewController(navController, animated: true, completion: nil)
+		}
 	}
 	
 	//	MARK: - Instance methods
@@ -288,42 +315,62 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 	
 	@objc private func panGesture(gesture:UIPanGestureRecognizer)
 	{
+		let viewController = slideViewControllerForPage(currentIndex)
+		
 		switch gesture.state
 		{
 		case .Began:
-			pageViewControllerCenter = view.center
+			presentingViewController?.view.transform = CGAffineTransformMakeScale(0.95, 0.95)
+			
+			originPanViewCenter = view.center
+			panViewCenter = view.center
+			viewController?.imageView?.layer.shadowRadius = 10
+			viewController?.imageView?.layer.shadowOpacity = 0.3
 			
 		case .Changed:
 			let translation = gesture.translationInView(view)
-			var origin = view.frame.origin
-			origin = CGPointMake(view.frame.origin.x + translation.x, view.frame.origin.y + translation.y)
-			view.frame = CGRect(origin: origin, size: view.frame.size)
+			panViewCenter = CGPointMake(panViewCenter.x + translation.x, panViewCenter.y + translation.y)
 			
 			gesture.setTranslation(CGPointZero, inView: view)
 			
-			
-			let distanceX = fabs(pageViewControllerCenter.x - view.center.x)
-			let distanceY = fabs(pageViewControllerCenter.y - view.center.y)
+			let distanceX = fabs(originPanViewCenter.x - panViewCenter.x)
+			let distanceY = fabs(originPanViewCenter.y - panViewCenter.y)
 			let distance = max(distanceX, distanceY)
-			let center = max(pageViewControllerCenter.x, pageViewControllerCenter.y)
+			let center = max(originPanViewCenter.x, originPanViewCenter.y)
 			
-			let alpha = CGFloat(1.0 - (distance / center))
+			let distanceNormalized = max(0, min((distance / center), 1.0))
+			let alpha = CGFloat(1.0 - distanceNormalized)
 			
 			navigationController?.navigationBar.alpha = 0.0
-			navigationController?.view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(alpha)
+			navigationController?.view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(max(0.2, alpha * 0.9))
+			
+			let scale = max(0.8, alpha)
+			
+			viewController?.imageView?.center = panViewCenter
+			viewController?.imageView?.transform = CGAffineTransformMakeScale(scale, scale)
 			
 		case .Ended, .Cancelled, .Failed:
-			let distanceX = fabs(pageViewControllerCenter.x - view.center.x)
-			let distanceY = fabs(pageViewControllerCenter.y - view.center.y)
+			let distanceY = fabs(originPanViewCenter.y - panViewCenter.y)
 			
-			if (distanceY >= panDismissTolerance || distanceX >= panDismissTolerance)
+			if (distanceY >= panDismissTolerance)
 			{
-				UIView.animateWithDuration(0.1,
+				let velocity = gesture.velocityInView(gesture.view).y
+				
+				UIView.animateWithDuration(0.3,
 					delay: 0.0,
 					options: .BeginFromCurrentState,
 					animations: { () -> Void in
 						
 						self.navigationController?.view.alpha = 0.0
+						self.presentingViewController?.view.transform = CGAffineTransformIdentity
+						
+						if var frame = viewController?.imageView?.frame
+						{
+							frame.origin.y = (velocity > 0 ? self.view.frame.size.height : -frame.size.height)
+							viewController?.imageView?.frame = frame
+						}
+						
+						viewController?.imageView?.alpha = 0.0
 						
 					}, completion: { (completed:Bool) -> Void in
 						
@@ -340,8 +387,13 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 						
 						self.navigationBarHidden = true
 						self.navigationController?.navigationBar.alpha = 0.0
-						self.navigationController?.view.backgroundColor = UIColor.blackColor()
-						self.view.center = self.pageViewControllerCenter;
+						self.navigationController?.view.backgroundColor = .blackColor()
+						self.presentingViewController?.view.transform = CGAffineTransformIdentity
+						
+						viewController?.imageView?.center = self.originPanViewCenter
+						viewController?.imageView?.transform = CGAffineTransformMakeScale(1.0, 1.0)
+						viewController?.imageView?.layer.shadowRadius = 0
+						viewController?.imageView?.layer.shadowOpacity = 0
 						
 				}, completion: nil)
 			}

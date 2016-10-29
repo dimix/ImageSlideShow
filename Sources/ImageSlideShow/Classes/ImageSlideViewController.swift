@@ -18,9 +18,9 @@ class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 	
 	var willBeginZoom:() -> Void = {}
 	
-    override func viewDidLoad()
+	override func viewDidLoad()
 	{
-        super.viewDidLoad()
+		super.viewDidLoad()
 		
 		if enableZoom
 		{
@@ -49,9 +49,18 @@ class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 	{
 		super.viewDidDisappear(animated)
 		
-		//	Reset zoom scale when the controller is hidden
+		if enableZoom
+		{
+			//	Reset zoom scale when the controller is hidden
 		
-		scrollView?.zoomScale = 1.0
+			scrollView?.zoomScale = 1.0
+		}
+	}
+	
+	func pan(center:CGPoint, scale: CGFloat)
+	{
+		imageView?.center = center
+		imageView?.transform = CGAffineTransformMakeScale(scale, scale)
 	}
 	
 	//	MARK: UIScrollViewDelegate
