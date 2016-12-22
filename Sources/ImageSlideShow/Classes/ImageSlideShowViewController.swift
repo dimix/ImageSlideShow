@@ -10,21 +10,21 @@ import UIKit
 @objc protocol ImageSlideShowProtocol
 {
 	func slideIdentifier() -> String
-	func image(completion: (image:UIImage?, error:NSError?) -> Void)
+	func image(completion: @escaping (_ image:UIImage?, _ error:Error?) -> Void)
 }
 
-class ImageSlideShowCache: NSCache
+class ImageSlideShowCache: NSCache<AnyObject, AnyObject>
 {
 	override init()
 	{
 		super.init()
 		
-		NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(NSMutableArray.removeAllObjects), name: UIApplicationDidReceiveMemoryWarningNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector:#selector(NSMutableArray.removeAllObjects), name: NSNotification.Name.UIApplicationDidReceiveMemoryWarning, object: nil)
 	}
 	
 	deinit
 	{
-		NSNotificationCenter.defaultCenter().removeObserver(self);
+		NotificationCenter.default.removeObserver(self);
 	}
 }
 
@@ -38,27 +38,47 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 	var panDismissTolerance:CGFloat = 30.0
 	var dismissOnPanGesture:Bool = false
 	var enableZoom:Bool = false
-	var statusBarStyle:UIStatusBarStyle = .LightContent
-	var navigationBarTintColor:UIColor = .whiteColor()
+	var statusBarStyle:UIStatusBarStyle = .lightContent
+	var navigationBarTintColor:UIColor = .white
 	
 	var controllerDidDismiss:() -> Void = {}
-	var stepAnimate:((offset:CGFloat, viewController:UIViewController) -> Void) = { _,_ in }
-	var restoreAnimation:((viewController:UIViewController) -> Void) = { _ in }
-	var dismissAnimation:((viewController:UIViewController, panDirection:CGPoint, completion:()->()) -> Void) = { _,_,_ in }
+	var stepAnimate:((_ offset:CGFloat, _ viewController:UIViewController) -> Void) = { _,_ in }
+	var restoreAnimation:((_ viewController:UIViewController) -> Void) = { _ in }
+	var dismissAnimation:((_ viewController:UIViewController, _ panDirection:CGPoint, _ completion: @escaping ()->()) -> Void) = { _,_,_ in }
 	
-	private var originPanViewCenter = CGPointZero
-	private var panViewCenter = CGPointZero
-	private var navigationBarHidden = false
-	private var toggleBarButtonItem:UIBarButtonItem?
-	private var currentIndex = 0
-	private let slidesViewControllerCache = ImageSlideShowCache()
+	fileprivate var originPanViewCenter:CGPoint = .zero
+	fileprivate var panViewCenter:CGPoint = .zero
+	fileprivate var navigationBarHidden = false
+	fileprivate var toggleBarButtonItem:UIBarButtonItem?
+	fileprivate var currentIndex = 0
+	fileprivate let slidesViewControllerCache = ImageSlideShowCache()
+	
+	override var preferredStatusBarStyle:UIStatusBarStyle
+	{
+		return statusBarStyle
+	}
+	
+	override var prefersStatusBarHidden:Bool
+	{
+		return navigationBarHidden
+	}
+	
+	override var shouldAutorotate:Bool
+	{
+		return true
+	}
+	
+	override var supportedInterfaceOrientations:UIInterfaceOrientationMask
+	{
+		return .all
+	}
 	
 	//	MARK: - Class methods
 	
 	class func imageSlideShowNavigationController() -> ImageSlideShowNavigationController
 	{
-		let controller = ImageSlideShowViewController.imageSlideShowStoryboard.instantiateViewControllerWithIdentifier("ImageSlideShowNavigationController") as! ImageSlideShowNavigationController
-		controller.modalPresentationStyle = .OverCurrentContext
+		let controller = ImageSlideShowViewController.imageSlideShowStoryboard.instantiateViewController(withIdentifier: "ImageSlideShowNavigationController") as! ImageSlideShowNavigationController
+		controller.modalPresentationStyle = .overCurrentContext
 		controller.modalPresentationCapturesStatusBarAppearance = true
 		
 		return controller
@@ -66,21 +86,21 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 	
 	class func imageSlideShowViewController() -> ImageSlideShowViewController
 	{
-		let controller = ImageSlideShowViewController.imageSlideShowStoryboard.instantiateViewControllerWithIdentifier("ImageSlideShowViewController") as! ImageSlideShowViewController
-		controller.modalPresentationStyle = .OverCurrentContext
+		let controller = ImageSlideShowViewController.imageSlideShowStoryboard.instantiateViewController(withIdentifier: "ImageSlideShowViewController") as! ImageSlideShowViewController
+		controller.modalPresentationStyle = .overCurrentContext
 		controller.modalPresentationCapturesStatusBarAppearance = true
 		
 		return controller
 	}
 	
-	class func presentFrom(viewController:UIViewController, configure:((controller: ImageSlideShowViewController) -> ())?)
+	class func presentFrom(_ viewController:UIViewController, configure:((_ controller: ImageSlideShowViewController) -> ())?)
 	{
 		let navController = self.imageSlideShowNavigationController()
 		if let issViewController = navController.visibleViewController as? ImageSlideShowViewController
 		{
-			configure?(controller: issViewController)
+			configure?(issViewController)
 			
-			viewController.presentViewController(navController, animated: true, completion: nil)
+			viewController.present(navController, animated: true, completion: nil)
 		}
 	}
 	
@@ -103,79 +123,59 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 		hidesBottomBarWhenPushed = true
 		
 		navigationController?.navigationBar.tintColor = navigationBarTintColor
-		navigationController?.view.backgroundColor = .blackColor()
-		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(dismiss(_:)))
+		navigationController?.view.backgroundColor = .black
+		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismiss(sender:)))
 		
 		//	Manage Gestures
 		
 		var gestures = gestureRecognizers
-		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGesture(_:)))
+		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGesture(gesture:)))
 		gestures.append(tapGesture)
 		
 		if (dismissOnPanGesture)
 		{
-			let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGesture(_:)))
+			let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGesture(gesture:)))
 			gestures.append(panGesture)
 			
 			//	If dismiss on pan lock horizontal direction and disable vertical pan to avoid strange behaviours
 			
-			scrollView()?.directionalLockEnabled = true
+			scrollView()?.isDirectionalLockEnabled = true
 			scrollView()?.alwaysBounceVertical = false
 		}
 		
 		view.gestureRecognizers = gestures
 	}
 	
-	override func viewWillAppear(animated: Bool)
+	override func viewWillAppear(_ animated: Bool)
 	{
 		super.viewWillAppear(animated)
 		
-		setPageWithIndex(initialIndex)
-	}
-	
-	override func preferredStatusBarStyle() -> UIStatusBarStyle
-	{
-		return statusBarStyle
-	}
-	
-	override func prefersStatusBarHidden() -> Bool
-	{
-		return navigationBarHidden
-	}
-	
-	override func shouldAutorotate() -> Bool
-	{
-		return true
-	}
-	
-	override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask
-	{
-		return .All
+		setPage(withIndex: initialIndex)
 	}
 	
 	//	MARK: Actions
 	
 	func dismiss(sender:AnyObject?)
 	{
-		dismissViewControllerAnimated(true, completion: nil)
+		dismiss(animated: true, completion: nil)
 		
 		controllerDidDismiss()
 	}
 	
-	func goToPageIndex(index:Int)
+	func goToPage(withIndex index:Int)
 	{
 		if index != currentIndex
 		{
-			setPageWithIndex(index)
+			setPage(withIndex: index)
 		}
 	}
 	
 	func goToNextPage()
 	{
 		let index = currentIndex + 1
-		if index < slides?.count
+		if index < (slides?.count)!
 		{
-			setPageWithIndex(index)
+			setPage(withIndex: index)
 		}
 	}
 	
@@ -184,27 +184,27 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 		let index = currentIndex - 1
 		if index >= 0
 		{
-			setPageWithIndex(index)
+			setPage(withIndex: index)
 		}
 	}
 	
-	func setPageWithIndex(index:Int)
+	func setPage(withIndex index:Int)
 	{
-		if	let viewController = slideViewControllerForPage(index)
+		if	let viewController = slideViewController(forPageIndex: index)
 		{
-			setViewControllers([viewController], direction: (index > currentIndex ? .Forward : .Reverse), animated: true, completion: nil)
+			setViewControllers([viewController], direction: (index > currentIndex ? .forward : .reverse), animated: true, completion: nil)
 			
 			currentIndex = index
 		}
 	}
 	
-	func setNavigationBarVisible(visible:Bool)
+	func setNavigationBar(visible:Bool)
 	{
 		navigationBarHidden = !visible
 		
-		UIView.animateWithDuration(0.23,
+		UIView.animate(withDuration: 0.23,
 		                           delay: 0.0,
-		                           options: .BeginFromCurrentState,
+		                           options: .beginFromCurrentState,
 		                           animations: { () -> Void in
 									
 									self.navigationController?.navigationBar.alpha = (visible ? 1.0 : 0.0)
@@ -216,26 +216,26 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 	
 	// MARK: UIPageViewControllerDataSource
 	
-	func pageViewController(pageViewController: UIPageViewController, willTransitionToViewControllers pendingViewControllers: [UIViewController])
+	func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController])
 	{
-		self.setNavigationBarVisible(false)
+		self.setNavigationBar(visible: false)
 	}
 	
-	func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool)
+	func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool)
 	{
 		if completed
 		{
-			currentIndex = indexOfSlideForViewController((pageViewController.viewControllers?.last)!)
+			currentIndex = indexOfSlideForViewController(viewController: (pageViewController.viewControllers?.last)!)
 		}
 	}
 	
-	func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController?
+	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController?
 	{
-		let index = indexOfSlideForViewController(viewController)
+		let index = indexOfSlideForViewController(viewController: viewController)
 		
 		if index > 0
 		{
-			return slideViewControllerForPage(index - 1)
+			return slideViewController(forPageIndex: index - 1)
 		}
 		else
 		{
@@ -243,13 +243,13 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 		}
 	}
 	
-	func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController?
+	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController?
 	{
-		let index = indexOfSlideForViewController(viewController)
+		let index = indexOfSlideForViewController(viewController: viewController)
 		
-		if let slides = slides where index < slides.count - 1
+		if let slides = slides, index < slides.count - 1
 		{
-			return slideViewControllerForPage(index + 1)
+			return slideViewController(forPageIndex: index + 1)
 		}
 		else
 		{
@@ -259,7 +259,7 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 	
 	// MARK: Accessories
 	
-	private func indexOfProtocolObjectInSlideViewController(controller: ImageSlideViewController) -> Int?
+	fileprivate func indexOfProtocolObject(inSlideViewController controller: ImageSlideViewController) -> Int?
 	{
 		var index = 0
 		
@@ -280,34 +280,34 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 		return nil
 	}
 	
-	private func indexOfSlideForViewController(viewController: UIViewController) -> Int
+	fileprivate func indexOfSlideForViewController(viewController: UIViewController) -> Int
 	{
 		guard let viewController = viewController as? ImageSlideViewController else { fatalError("Unexpected view controller type in page view controller.") }
-		guard let viewControllerIndex = indexOfProtocolObjectInSlideViewController(viewController) else { fatalError("View controller's data item not found.") }
+		guard let viewControllerIndex = indexOfProtocolObject(inSlideViewController: viewController) else { fatalError("View controller's data item not found.") }
 		
 		return viewControllerIndex
 	}
 	
-	private func slideViewControllerForPage(pageIndex: Int) -> ImageSlideViewController?
+	fileprivate func slideViewController(forPageIndex pageIndex: Int) -> ImageSlideViewController?
 	{
-		if let slides = slides where slides.count > 0
+		if let slides = slides, slides.count > 0
 		{
 			let slide = slides[pageIndex]
 			
-			if let cachedController = slidesViewControllerCache.objectForKey(slide.slideIdentifier()) as? ImageSlideViewController
+			if let cachedController = slidesViewControllerCache.object(forKey: slide.slideIdentifier() as AnyObject) as? ImageSlideViewController
 			{
 				return cachedController
 			}
 			else
 			{
-				guard let controller = storyboard?.instantiateViewControllerWithIdentifier("ImageSlideViewController") as? ImageSlideViewController else { fatalError("Unable to instantiate a ImageSlideViewController.") }
+				guard let controller = self.storyboard?.instantiateViewController(withIdentifier: "ImageSlideViewController") as? ImageSlideViewController else { fatalError("Unable to instantiate a ImageSlideViewController.") }
 				controller.slide = slide
 				controller.enableZoom = enableZoom
 				controller.willBeginZoom = {
-					self.setNavigationBarVisible(false)
+					self.setNavigationBar(visible: false)
 				}
 				
-				slidesViewControllerCache.setObject(controller, forKey: slide.slideIdentifier())
+				slidesViewControllerCache.setObject(controller, forKey: slide.slideIdentifier() as AnyObject)
 				
 				return controller
 			}
@@ -316,7 +316,7 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 		return nil
 	}
 	
-	private func prepareAnimations()
+	fileprivate func prepareAnimations()
 	{
 		stepAnimate = { step, viewController in
 			
@@ -332,12 +332,12 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 					let alpha = CGFloat(1.0 - step)
 					
 					self.navigationController?.navigationBar.alpha = 0.0
-					self.navigationController?.view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(max(0.2, alpha * 0.9))
+					self.navigationController?.view.backgroundColor = UIColor.black.withAlphaComponent(max(0.2, alpha * 0.9))
 					
 					let scale = max(0.8, alpha)
 					
 					viewController.imageView?.center = self.panViewCenter
-					viewController.imageView?.transform = CGAffineTransformMakeScale(scale, scale)
+					viewController.imageView?.transform = CGAffineTransform(scaleX: scale, y: scale)
 				}
 			}
 		}
@@ -345,15 +345,15 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 			
 			if let viewController = viewController as? ImageSlideViewController
 			{
-				UIView.animateWithDuration(0.2,
+				UIView.animate(withDuration: 0.2,
 				                           delay: 0.0,
-				                           options: .BeginFromCurrentState,
+				                           options: .beginFromCurrentState,
 				                           animations: { () -> Void in
 											
-											self.presentingViewController?.view.transform = CGAffineTransformIdentity
+											self.presentingViewController?.view.transform = CGAffineTransform.identity
 											
 											viewController.imageView?.center = self.originPanViewCenter
-											viewController.imageView?.transform = CGAffineTransformMakeScale(1.0, 1.0)
+											viewController.imageView?.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
 											viewController.imageView?.layer.shadowRadius = 0
 											viewController.imageView?.layer.shadowOpacity = 0
 											
@@ -366,12 +366,12 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 			{
 				let velocity = panDirection.y
 				
-				UIView.animateWithDuration(0.3,
+				UIView.animate(withDuration: 0.3,
 				                           delay: 0.0,
-				                           options: .BeginFromCurrentState,
+				                           options: .beginFromCurrentState,
 				                           animations: { () -> Void in
 											
-											self.presentingViewController?.view.transform = CGAffineTransformIdentity
+											self.presentingViewController?.view.transform = CGAffineTransform.identity
 											
 											if var frame = viewController.imageView?.frame
 											{
@@ -392,30 +392,30 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 	
 	// MARK: Gestures
 	
-	@objc private func tapGesture(gesture:UITapGestureRecognizer)
+	@objc fileprivate func tapGesture(gesture:UITapGestureRecognizer)
 	{
-		setNavigationBarVisible(navigationBarHidden == true);
+		setNavigationBar(visible: navigationBarHidden == true);
 	}
 	
-	@objc private func panGesture(gesture:UIPanGestureRecognizer)
+	@objc fileprivate func panGesture(gesture:UIPanGestureRecognizer)
 	{
-		let viewController = slideViewControllerForPage(currentIndex)
+		let viewController = slideViewController(forPageIndex: currentIndex)
 		
 		switch gesture.state
 		{
-		case .Began:
-			presentingViewController?.view.transform = CGAffineTransformMakeScale(0.95, 0.95)
+		case .began:
+			presentingViewController?.view.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
 			
 			originPanViewCenter = view.center
 			panViewCenter = view.center
 			
-			stepAnimate(offset:0, viewController: viewController!)
+			stepAnimate(0, viewController!)
 			
-		case .Changed:
-			let translation = gesture.translationInView(view)
-			panViewCenter = CGPointMake(panViewCenter.x + translation.x, panViewCenter.y + translation.y)
+		case .changed:
+			let translation = gesture.translation(in: view)
+			panViewCenter = CGPoint(x: panViewCenter.x + translation.x, y: panViewCenter.y + translation.y)
 			
-			gesture.setTranslation(CGPointZero, inView: view)
+			gesture.setTranslation(.zero, in: view)
 			
 			let distanceX = fabs(originPanViewCenter.x - panViewCenter.x)
 			let distanceY = fabs(originPanViewCenter.y - panViewCenter.y)
@@ -424,41 +424,41 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 			
 			let distanceNormalized = max(0, min((distance / center), 1.0))
 			
-			stepAnimate(offset: distanceNormalized, viewController: viewController!)
+			stepAnimate(distanceNormalized, viewController!)
 			
-		case .Ended, .Cancelled, .Failed:
+		case .ended, .cancelled, .failed:
 			let distanceY = fabs(originPanViewCenter.y - panViewCenter.y)
 			
 			if (distanceY >= panDismissTolerance)
 			{
-				UIView.animateWithDuration(0.3,
+				UIView.animate(withDuration: 0.3,
 				                           delay: 0.0,
-				                           options: .BeginFromCurrentState,
+				                           options: .beginFromCurrentState,
 				                           animations: { () -> Void in
 											
 											self.navigationController?.view.alpha = 0.0
 					}, completion:nil)
 				
-				dismissAnimation(viewController: viewController!, panDirection: gesture.velocityInView(gesture.view), completion: {
+				dismissAnimation(viewController!, gesture.velocity(in: gesture.view), {
 					
-					self.dismiss(nil)
+					self.dismiss(sender: nil)
 					
 				})
 			}
 			else
 			{
-				UIView.animateWithDuration(0.2,
+				UIView.animate(withDuration: 0.2,
 				                           delay: 0.0,
-				                           options: .BeginFromCurrentState,
+				                           options: .beginFromCurrentState,
 				                           animations: { () -> Void in
 											
 											self.navigationBarHidden = true
 											self.navigationController?.navigationBar.alpha = 0.0
-											self.navigationController?.view.backgroundColor = .blackColor()
+											self.navigationController?.view.backgroundColor = .black
 											
 					}, completion: nil)
 				
-				restoreAnimation(viewController: viewController!)
+				restoreAnimation(viewController!)
 			}
 			
 		default:
