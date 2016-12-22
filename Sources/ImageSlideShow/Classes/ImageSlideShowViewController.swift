@@ -42,6 +42,9 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 	var navigationBarTintColor:UIColor = .whiteColor()
 	
 	var controllerDidDismiss:() -> Void = {}
+	var stepAnimate:((offset:CGFloat, viewController:UIViewController) -> Void) = { _,_ in }
+	var restoreAnimation:((viewController:UIViewController) -> Void) = { _ in }
+	var dismissAnimation:((viewController:UIViewController, panDirection:CGPoint, completion:()->()) -> Void) = { _,_,_ in }
 	
 	private var originPanViewCenter = CGPointZero
 	private var panViewCenter = CGPointZero
@@ -79,6 +82,13 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 			
 			viewController.presentViewController(navController, animated: true, completion: nil)
 		}
+	}
+	
+	required init?(coder: NSCoder)
+	{
+		super.init(coder: coder)
+		
+		prepareAnimations()
 	}
 	
 	//	MARK: - Instance methods
@@ -306,6 +316,80 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 		return nil
 	}
 	
+	private func prepareAnimations()
+	{
+		stepAnimate = { step, viewController in
+			
+			if let viewController = viewController as? ImageSlideViewController
+			{
+				if step == 0
+				{
+					viewController.imageView?.layer.shadowRadius = 10
+					viewController.imageView?.layer.shadowOpacity = 0.3
+				}
+				else
+				{
+					let alpha = CGFloat(1.0 - step)
+					
+					self.navigationController?.navigationBar.alpha = 0.0
+					self.navigationController?.view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(max(0.2, alpha * 0.9))
+					
+					let scale = max(0.8, alpha)
+					
+					viewController.imageView?.center = self.panViewCenter
+					viewController.imageView?.transform = CGAffineTransformMakeScale(scale, scale)
+				}
+			}
+		}
+		restoreAnimation = { viewController in
+			
+			if let viewController = viewController as? ImageSlideViewController
+			{
+				UIView.animateWithDuration(0.2,
+				                           delay: 0.0,
+				                           options: .BeginFromCurrentState,
+				                           animations: { () -> Void in
+											
+											self.presentingViewController?.view.transform = CGAffineTransformIdentity
+											
+											viewController.imageView?.center = self.originPanViewCenter
+											viewController.imageView?.transform = CGAffineTransformMakeScale(1.0, 1.0)
+											viewController.imageView?.layer.shadowRadius = 0
+											viewController.imageView?.layer.shadowOpacity = 0
+											
+					}, completion: nil)
+			}
+		}
+		dismissAnimation = {  viewController, panDirection, completion in
+			
+			if let viewController = viewController as? ImageSlideViewController
+			{
+				let velocity = panDirection.y
+				
+				UIView.animateWithDuration(0.3,
+				                           delay: 0.0,
+				                           options: .BeginFromCurrentState,
+				                           animations: { () -> Void in
+											
+											self.presentingViewController?.view.transform = CGAffineTransformIdentity
+											
+											if var frame = viewController.imageView?.frame
+											{
+												frame.origin.y = (velocity > 0 ? self.view.frame.size.height : -frame.size.height)
+												viewController.imageView?.frame = frame
+											}
+											
+											viewController.imageView?.alpha = 0.0
+											
+					}, completion: { (completed:Bool) -> Void in
+						
+						completion()
+						
+				})
+			}
+		}
+	}
+	
 	// MARK: Gestures
 	
 	@objc private func tapGesture(gesture:UITapGestureRecognizer)
@@ -324,8 +408,8 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 			
 			originPanViewCenter = view.center
 			panViewCenter = view.center
-			viewController?.imageView?.layer.shadowRadius = 10
-			viewController?.imageView?.layer.shadowOpacity = 0.3
+			
+			stepAnimate(offset:0, viewController: viewController!)
 			
 		case .Changed:
 			let translation = gesture.translationInView(view)
@@ -339,63 +423,42 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 			let center = max(originPanViewCenter.x, originPanViewCenter.y)
 			
 			let distanceNormalized = max(0, min((distance / center), 1.0))
-			let alpha = CGFloat(1.0 - distanceNormalized)
 			
-			navigationController?.navigationBar.alpha = 0.0
-			navigationController?.view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(max(0.2, alpha * 0.9))
-			
-			let scale = max(0.8, alpha)
-			
-			viewController?.imageView?.center = panViewCenter
-			viewController?.imageView?.transform = CGAffineTransformMakeScale(scale, scale)
+			stepAnimate(offset: distanceNormalized, viewController: viewController!)
 			
 		case .Ended, .Cancelled, .Failed:
 			let distanceY = fabs(originPanViewCenter.y - panViewCenter.y)
 			
 			if (distanceY >= panDismissTolerance)
 			{
-				let velocity = gesture.velocityInView(gesture.view).y
-				
 				UIView.animateWithDuration(0.3,
-					delay: 0.0,
-					options: .BeginFromCurrentState,
-					animations: { () -> Void in
-						
-						self.navigationController?.view.alpha = 0.0
-						self.presentingViewController?.view.transform = CGAffineTransformIdentity
-						
-						if var frame = viewController?.imageView?.frame
-						{
-							frame.origin.y = (velocity > 0 ? self.view.frame.size.height : -frame.size.height)
-							viewController?.imageView?.frame = frame
-						}
-						
-						viewController?.imageView?.alpha = 0.0
-						
-					}, completion: { (completed:Bool) -> Void in
-						
-						self.dismiss(nil)
-						
-					})
+				                           delay: 0.0,
+				                           options: .BeginFromCurrentState,
+				                           animations: { () -> Void in
+											
+											self.navigationController?.view.alpha = 0.0
+					}, completion:nil)
+				
+				dismissAnimation(viewController: viewController!, panDirection: gesture.velocityInView(gesture.view), completion: {
+					
+					self.dismiss(nil)
+					
+				})
 			}
 			else
 			{
 				UIView.animateWithDuration(0.2,
-					delay: 0.0,
-					options: .BeginFromCurrentState,
-					animations: { () -> Void in
-						
-						self.navigationBarHidden = true
-						self.navigationController?.navigationBar.alpha = 0.0
-						self.navigationController?.view.backgroundColor = .blackColor()
-						self.presentingViewController?.view.transform = CGAffineTransformIdentity
-						
-						viewController?.imageView?.center = self.originPanViewCenter
-						viewController?.imageView?.transform = CGAffineTransformMakeScale(1.0, 1.0)
-						viewController?.imageView?.layer.shadowRadius = 0
-						viewController?.imageView?.layer.shadowOpacity = 0
-						
-				}, completion: nil)
+				                           delay: 0.0,
+				                           options: .BeginFromCurrentState,
+				                           animations: { () -> Void in
+											
+											self.navigationBarHidden = true
+											self.navigationController?.navigationBar.alpha = 0.0
+											self.navigationController?.view.backgroundColor = .blackColor()
+											
+					}, completion: nil)
+				
+				restoreAnimation(viewController: viewController!)
 			}
 			
 		default:

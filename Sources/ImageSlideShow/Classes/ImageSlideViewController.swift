@@ -57,12 +57,6 @@ class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 		}
 	}
 	
-	func pan(center:CGPoint, scale: CGFloat)
-	{
-		imageView?.center = center
-		imageView?.transform = CGAffineTransformMakeScale(scale, scale)
-	}
-	
 	//	MARK: UIScrollViewDelegate
 	
 	func scrollViewWillBeginZooming(scrollView: UIScrollView, withView view: UIView?)
