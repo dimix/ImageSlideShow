@@ -9,14 +9,14 @@ import UIKit
 
 class ImageSlideShowNavigationController: UINavigationController
 {
-	override func childViewControllerForStatusBarStyle() -> UIViewController?
+	override var childViewControllerForStatusBarStyle: UIViewController?
 	{
 		return topViewController
 	}
 	
-	override func prefersStatusBarHidden() -> Bool
+	override var prefersStatusBarHidden:Bool
 	{
-		if let prefersStatusBarHidden = viewControllers.last?.prefersStatusBarHidden()
+		if let prefersStatusBarHidden = viewControllers.last?.prefersStatusBarHidden
 		{
 			return prefersStatusBarHidden
 		}

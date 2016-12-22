@@ -13,7 +13,7 @@ extension UIPageViewController
 	
 	func scrollView() -> UIScrollView?
 	{
-		for view in self.view.subviews
+		for view in view.subviews
 		{
 			if let scrollview = view as? UIScrollView
 			{
@@ -26,6 +26,6 @@ extension UIPageViewController
 	
 	func setScrollEnabled(enabled:Bool)
 	{
-		scrollView()?.scrollEnabled = enabled
+		scrollView()?.isScrollEnabled = enabled
 	}
 }

@@ -29,23 +29,23 @@ class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 			scrollView?.zoomScale = 1.0
 		}
 		
-		scrollView?.hidden = true
+		scrollView?.isHidden = true
 		loadingIndicatorView?.startAnimating()
 		
-		slide?.image({ (image, error) -> Void in
+		slide?.image(completion: { (image, error) -> Void in
 			
-			dispatch_async(dispatch_get_main_queue(), { 
-				
+			DispatchQueue.main.async {
+			
 				self.imageView?.image = image
 				self.loadingIndicatorView?.stopAnimating()
-				self.scrollView?.hidden = false
+				self.scrollView?.isHidden = false
 				
-			})
+			}
 			
 		})
     }
 	
-	override func viewDidDisappear(animated: Bool)
+	override func viewDidDisappear(_ animated: Bool)
 	{
 		super.viewDidDisappear(animated)
 		
@@ -59,12 +59,12 @@ class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 	
 	//	MARK: UIScrollViewDelegate
 	
-	func scrollViewWillBeginZooming(scrollView: UIScrollView, withView view: UIView?)
+	func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?)
 	{
 		willBeginZoom()
 	}
 	
-	func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView?
+	func viewForZooming(in scrollView: UIScrollView) -> UIView?
 	{
 		if enableZoom
 		{
