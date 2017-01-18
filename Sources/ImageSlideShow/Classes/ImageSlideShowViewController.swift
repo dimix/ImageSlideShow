@@ -19,7 +19,7 @@ class ImageSlideShowCache: NSCache<AnyObject, AnyObject>
 	{
 		super.init()
 		
-		NotificationCenter.default.addObserver(self, selector:#selector(NSMutableArray.removeAllObjects), name: NSNotification.Name.UIApplicationDidReceiveMemoryWarning, object: nil)
+		NotificationCenter.default.addObserver(self, selector:#selector(NSMutableArray.removeAllObjects), name: Notification.Name.UIApplicationDidReceiveMemoryWarning, object: nil)
 	}
 	
 	deinit
