@@ -28,7 +28,7 @@ class ImageSlideShowCache: NSCache<AnyObject, AnyObject>
 	}
 }
 
-class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate
+open class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate
 {
 	static var imageSlideShowStoryboard:UIStoryboard = UIStoryboard(name: "ImageSlideShow", bundle: nil)
 	
@@ -53,22 +53,22 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 	fileprivate var currentIndex = 0
 	fileprivate let slidesViewControllerCache = ImageSlideShowCache()
 	
-	override var preferredStatusBarStyle:UIStatusBarStyle
+	override open var preferredStatusBarStyle:UIStatusBarStyle
 	{
 		return statusBarStyle
 	}
 	
-	override var prefersStatusBarHidden:Bool
+	override open var prefersStatusBarHidden:Bool
 	{
 		return navigationBarHidden
 	}
 	
-	override var shouldAutorotate:Bool
+	override open var shouldAutorotate:Bool
 	{
 		return true
 	}
 	
-	override var supportedInterfaceOrientations:UIInterfaceOrientationMask
+	override open var supportedInterfaceOrientations:UIInterfaceOrientationMask
 	{
 		return .all
 	}
@@ -104,7 +104,7 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 		}
 	}
 	
-	required init?(coder: NSCoder)
+	required public init?(coder: NSCoder)
 	{
 		super.init(coder: coder)
 		
@@ -113,7 +113,7 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 	
 	//	MARK: - Instance methods
 	
-	override func viewDidLoad()
+	override open func viewDidLoad()
 	{
 		super.viewDidLoad()
 		
@@ -146,7 +146,7 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 		view.gestureRecognizers = gestures
 	}
 	
-	override func viewWillAppear(_ animated: Bool)
+	override open func viewWillAppear(_ animated: Bool)
 	{
 		super.viewWillAppear(animated)
 		
@@ -216,12 +216,12 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 	
 	// MARK: UIPageViewControllerDataSource
 	
-	func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController])
+	public func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController])
 	{
 		self.setNavigationBar(visible: false)
 	}
 	
-	func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool)
+	public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool)
 	{
 		if completed
 		{
@@ -229,7 +229,7 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 		}
 	}
 	
-	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController?
+	public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController?
 	{
 		let index = indexOfSlideForViewController(viewController: viewController)
 		
@@ -243,7 +243,7 @@ class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDa
 		}
 	}
 	
-	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController?
+	public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController?
 	{
 		let index = indexOfSlideForViewController(viewController: viewController)
 		
