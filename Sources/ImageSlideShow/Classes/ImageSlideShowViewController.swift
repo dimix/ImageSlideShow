@@ -30,7 +30,7 @@ class ImageSlideShowCache: NSCache<AnyObject, AnyObject>
 
 open class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate
 {
-	static var imageSlideShowStoryboard:UIStoryboard = UIStoryboard(name: "ImageSlideShow", bundle: nil)
+	static var imageSlideShowStoryboard:UIStoryboard = UIStoryboard(name: "ImageSlideShow", bundle: Bundle(for: ImageSlideShowViewController.self))
 	
 	open var slides:[ImageSlideShowProtocol]?
 	open var initialIndex:Int = 0
