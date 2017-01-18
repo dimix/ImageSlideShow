@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name         = "ImageSlideShow Swift"
+  s.name         = "ImageSlideShow-Swift"
   s.version      = "0.1.0"
   s.summary      = "A simple Swift 3 Slideshow for iOS"
   s.description  = "ImageSlideShow is a simple Slideshow for images (Picture, Photos) for your apps written in Swift 3."
