@@ -74,6 +74,5 @@ Are you searching for an old (unsupported) version? Check out:
 
 ## To Do
 
-* Add CocoaPods support
 * Add Carthage support
 * Create module
