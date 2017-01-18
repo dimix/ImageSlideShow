@@ -3,7 +3,8 @@
 ![Version](https://img.shields.io/cocoapods/v/ImageSlideShowSwift.svg?style=flat)
 
 # Swift ImageSlideShow for iOS
-ImageSlideShow is a simple Slideshow for images (Picture, Photos) for your apps written in Swift 3.
+ImageSlideShow is a simple Slideshow for images (Picture, Photos) for your iOS apps written in Swift 3.
+You can use this class on iPhone and iPad as well.
 
 ![alt tag](https://raw.githubusercontent.com/dimix/ImageSlideShow/e6e9a62db2b4c82b58d5b298ef6802c0a8125970/demo.gif)
 
