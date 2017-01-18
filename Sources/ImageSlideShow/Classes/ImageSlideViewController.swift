@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ImageSlideViewController: UIViewController, UIScrollViewDelegate
+open  class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 {
 	@IBOutlet weak var scrollView:UIScrollView?
 	@IBOutlet weak var imageView:UIImageView?
@@ -18,7 +18,7 @@ class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 	
 	var willBeginZoom:() -> Void = {}
 	
-	override func viewDidLoad()
+	override open func viewDidLoad()
 	{
 		super.viewDidLoad()
 		
@@ -45,7 +45,7 @@ class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 		})
     }
 	
-	override func viewDidDisappear(_ animated: Bool)
+	override open func viewDidDisappear(_ animated: Bool)
 	{
 		super.viewDidDisappear(animated)
 		
@@ -59,12 +59,12 @@ class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 	
 	//	MARK: UIScrollViewDelegate
 	
-	func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?)
+	open func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?)
 	{
 		willBeginZoom()
 	}
 	
-	func viewForZooming(in scrollView: UIScrollView) -> UIView?
+	open func viewForZooming(in scrollView: UIScrollView) -> UIView?
 	{
 		if enableZoom
 		{
