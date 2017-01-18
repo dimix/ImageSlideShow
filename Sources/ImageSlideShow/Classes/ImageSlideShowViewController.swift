@@ -28,7 +28,7 @@ class ImageSlideShowCache: NSCache<AnyObject, AnyObject>
 	}
 }
 
-open class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate
+class ImageSlideShowViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate
 {
 	static var imageSlideShowStoryboard:UIStoryboard = UIStoryboard(name: "ImageSlideShow", bundle: nil)
 	
@@ -53,22 +53,22 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	fileprivate var currentIndex = 0
 	fileprivate let slidesViewControllerCache = ImageSlideShowCache()
 	
-	override open var preferredStatusBarStyle:UIStatusBarStyle
+	override var preferredStatusBarStyle:UIStatusBarStyle
 	{
 		return statusBarStyle
 	}
 	
-	override open var prefersStatusBarHidden:Bool
+	override var prefersStatusBarHidden:Bool
 	{
 		return navigationBarHidden
 	}
 	
-	override open var shouldAutorotate:Bool
+	override var shouldAutorotate:Bool
 	{
 		return true
 	}
 	
-	override open var supportedInterfaceOrientations:UIInterfaceOrientationMask
+	override var supportedInterfaceOrientations:UIInterfaceOrientationMask
 	{
 		return .all
 	}
@@ -93,7 +93,7 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 		return controller
 	}
 	
-	class func presentFrom(_ viewController:UIViewController, configure:((_ controller: ImageSlideShowViewController) -> ())?)
+	class open func presentFrom(_ viewController:UIViewController, configure:((_ controller: ImageSlideShowViewController) -> ())?)
 	{
 		let navController = self.imageSlideShowNavigationController()
 		if let issViewController = navController.visibleViewController as? ImageSlideShowViewController
@@ -113,7 +113,7 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	
 	//	MARK: - Instance methods
 	
-	override open func viewDidLoad()
+	override func viewDidLoad()
 	{
 		super.viewDidLoad()
 		
@@ -146,7 +146,7 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 		view.gestureRecognizers = gestures
 	}
 	
-	override open func viewWillAppear(_ animated: Bool)
+	override func viewWillAppear(_ animated: Bool)
 	{
 		super.viewWillAppear(animated)
 		
@@ -155,14 +155,14 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	
 	//	MARK: Actions
 	
-	func dismiss(sender:AnyObject?)
+	open func dismiss(sender:AnyObject?)
 	{
 		dismiss(animated: true, completion: nil)
 		
 		controllerDidDismiss()
 	}
 	
-	func goToPage(withIndex index:Int)
+	open func goToPage(withIndex index:Int)
 	{
 		if index != currentIndex
 		{
@@ -170,7 +170,7 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 		}
 	}
 	
-	func goToNextPage()
+	open func goToNextPage()
 	{
 		let index = currentIndex + 1
 		if index < (slides?.count)!
@@ -179,7 +179,7 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 		}
 	}
 	
-	func goToPreviousPage()
+	open func goToPreviousPage()
 	{
 		let index = currentIndex - 1
 		if index >= 0
