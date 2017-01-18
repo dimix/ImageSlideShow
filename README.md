@@ -10,9 +10,39 @@ ImageSlideShow is a simple Slideshow for images (Picture, Photos) for your apps 
 - All in one slideshow with generic protocol to provide images directly from the model
 - Pan-gesture-to-dismiss behaviour (like Facebook)
 
+## Installation with CocoaPods
+
+[CocoaPods](http://cocoapods.org) is a dependency manager for Objective-C, which automates and simplifies the process of using 3rd-party libraries like ImageSlideShow in your projects. You can install it with the following command:
+
+```bash
+$ gem install cocoapods
+```
+
+> CocoaPods 1.0.1+ is required to build ImageSlideShow (along with Swift 3 and Xcode 8).
+
+#### Podfile
+
+To integrate ImageSlideShow into your Xcode project using CocoaPods, specify it in your `Podfile`:
+
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '8.0'
+
+target 'TargetName' do
+  use_frameworks!
+  pod 'ImageSlideShowSwift', '~> 4.0'
+end
+```
+
+Then, run the following command:
+
+```bash
+$ pod install
+```
+
 ## How to Use
 
-#### 1. Import ImageSlideShow folder in your project
+#### 1. Import ImageSlideShowSwift module
 #### 2. Instantiate the controller
 
 ```swift
