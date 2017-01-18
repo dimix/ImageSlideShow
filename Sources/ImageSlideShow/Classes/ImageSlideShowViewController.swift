@@ -7,7 +7,7 @@
 
 import UIKit
 
-@objc protocol ImageSlideShowProtocol
+@objc public protocol ImageSlideShowProtocol
 {
 	func slideIdentifier() -> String
 	func image(completion: @escaping (_ image:UIImage?, _ error:Error?) -> Void)
@@ -32,19 +32,19 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 {
 	static var imageSlideShowStoryboard:UIStoryboard = UIStoryboard(name: "ImageSlideShow", bundle: nil)
 	
-	var slides:[ImageSlideShowProtocol]?
-	var initialIndex:Int = 0
-	var pageSpacing:CGFloat = 10.0
-	var panDismissTolerance:CGFloat = 30.0
-	var dismissOnPanGesture:Bool = false
-	var enableZoom:Bool = false
-	var statusBarStyle:UIStatusBarStyle = .lightContent
-	var navigationBarTintColor:UIColor = .white
+	open var slides:[ImageSlideShowProtocol]?
+	open var initialIndex:Int = 0
+	open var pageSpacing:CGFloat = 10.0
+	open var panDismissTolerance:CGFloat = 30.0
+	open var dismissOnPanGesture:Bool = false
+	open var enableZoom:Bool = false
+	open var statusBarStyle:UIStatusBarStyle = .lightContent
+	open var navigationBarTintColor:UIColor = .white
 	
-	var controllerDidDismiss:() -> Void = {}
-	var stepAnimate:((_ offset:CGFloat, _ viewController:UIViewController) -> Void) = { _,_ in }
-	var restoreAnimation:((_ viewController:UIViewController) -> Void) = { _ in }
-	var dismissAnimation:((_ viewController:UIViewController, _ panDirection:CGPoint, _ completion: @escaping ()->()) -> Void) = { _,_,_ in }
+	open var controllerDidDismiss:() -> Void = {}
+	open var stepAnimate:((_ offset:CGFloat, _ viewController:UIViewController) -> Void) = { _,_ in }
+	open var restoreAnimation:((_ viewController:UIViewController) -> Void) = { _ in }
+	open var dismissAnimation:((_ viewController:UIViewController, _ panDirection:CGPoint, _ completion: @escaping ()->()) -> Void) = { _,_,_ in }
 	
 	fileprivate var originPanViewCenter:CGPoint = .zero
 	fileprivate var panViewCenter:CGPoint = .zero
