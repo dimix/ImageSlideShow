@@ -1,0 +1,19 @@
+# .travis.yml
+
+# references:
+# * http://www.objc.io/issue-6/travis-ci.html
+# * https://github.com/supermarin/xcpretty#usage
+
+osx_image: xcode8.0
+language: objective-c
+xcode_sdk: macosx10.11
+xcode_scheme: ImageSlideShow
+before_install:
+- export LANG=en_US.UTF-8
+- env
+- locale
+- brew update
+- brew install swiftlint
+after_success:
+- swiftlint lint --path Sources/SwiftDate
+- pod lib lint
