@@ -1,5 +1,6 @@
-![License](https://img.shields.io/badge/license-mit-black.svg?style=flat)
+![License](https://img.shields.io/cocoapods/l/ImageSlideShowSwift.svg?style=flat)
 ![Platform](https://img.shields.io/badge/platform-ios-lightgray.svg?style=flat)
+![Version](https://img.shields.io/cocoapods/v/ImageSlideShowSwift.svg?style=flat)
 
 # Swift ImageSlideShow for iOS
 ImageSlideShow is a simple Slideshow for images (Picture, Photos) for your apps written in Swift 3.
