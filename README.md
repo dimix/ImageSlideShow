@@ -1,6 +1,7 @@
 ![License](https://img.shields.io/cocoapods/l/ImageSlideShowSwift.svg?style=flat)
 ![Platform](https://img.shields.io/badge/platform-ios-lightgray.svg?style=flat)
 ![Version](https://img.shields.io/cocoapods/v/ImageSlideShowSwift.svg?style=flat)
+![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)
 
 # Swift ImageSlideShow for iOS
 ImageSlideShow is a simple Slideshow for images (Picture, Photos) for your iOS apps written in Swift 3.
@@ -41,6 +42,19 @@ Then, run the following command:
 ```bash
 $ pod install
 ```
+
+## Installation with Carthage
+Currently only iOS is supported.
+
+1. Add the following to your [Cartfile](https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile):
+
+    ```
+    github "dimix/ImageSlideShow"
+    ```
+
+2. Run `carthage update --platform ios`
+
+3. Copy the framework into your project and you are good to go.
 
 ## How to Use
 
