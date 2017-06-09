@@ -90,5 +90,8 @@ Are you searching for an old (unsupported) version? Check out:
 
 ## To Do
 
-* Add Carthage support
 * Create module
+
+## Credits
+
+Thanks to Lasse-Hansen for the Carthage support!
