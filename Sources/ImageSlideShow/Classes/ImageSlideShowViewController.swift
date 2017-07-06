@@ -45,6 +45,10 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	open var stepAnimate:((_ offset:CGFloat, _ viewController:UIViewController) -> Void) = { _,_ in }
 	open var restoreAnimation:((_ viewController:UIViewController) -> Void) = { _ in }
 	open var dismissAnimation:((_ viewController:UIViewController, _ panDirection:CGPoint, _ completion: @escaping ()->()) -> Void) = { _,_,_ in }
+    
+    //Give the user the ability to customize UIViewController lifecycle methods
+    open var customViewDidLoad: (() -> ())? = nil
+    open var customViewWillAppear: ((Bool) -> ())? = nil
 	
 	fileprivate var originPanViewCenter:CGPoint = .zero
 	fileprivate var panViewCenter:CGPoint = .zero
@@ -144,6 +148,10 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 		}
 		
 		view.gestureRecognizers = gestures
+        
+        if let customFunction = self.customViewDidLoad {
+            customFunction()
+        }
 	}
 	
 	override open func viewWillAppear(_ animated: Bool)
@@ -151,6 +159,10 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 		super.viewWillAppear(animated)
 		
 		setPage(withIndex: initialIndex)
+        
+        if let customFunction = self.customViewWillAppear{
+            customFunction(animated)
+        }
 	}
 	
 	//	MARK: Actions
