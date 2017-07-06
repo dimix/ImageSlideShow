@@ -225,6 +225,10 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 		
 		self.setNeedsStatusBarAppearanceUpdate()
 	}
+    
+    func getCurrentSlide() -> ImageSlideShowProtocol? {
+        return self.slides?.get(self.currentIndex)
+    }
 	
 	// MARK: UIPageViewControllerDataSource
 	
