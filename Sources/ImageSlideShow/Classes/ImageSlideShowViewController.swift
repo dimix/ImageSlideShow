@@ -40,6 +40,9 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	open var enableZoom:Bool = false
 	open var statusBarStyle:UIStatusBarStyle = .lightContent
 	open var navigationBarTintColor:UIColor = .white
+	open var currentIndex: Int {
+		return _currentIndex
+	}
 	
 	open var controllerDidDismiss:() -> Void = {}
 	open var stepAnimate:((_ offset:CGFloat, _ viewController:UIViewController) -> Void) = { _,_ in }
@@ -50,7 +53,7 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	fileprivate var panViewCenter:CGPoint = .zero
 	fileprivate var navigationBarHidden = false
 	fileprivate var toggleBarButtonItem:UIBarButtonItem?
-	fileprivate var currentIndex = 0
+	fileprivate var _currentIndex: Int = 0
 	fileprivate let slidesViewControllerCache = ImageSlideShowCache()
 	
 	override open var preferredStatusBarStyle:UIStatusBarStyle
@@ -164,7 +167,7 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	
 	open func goToPage(withIndex index:Int)
 	{
-		if index != currentIndex
+		if index != _currentIndex
 		{
 			setPage(withIndex: index)
 		}
@@ -172,7 +175,7 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	
 	open func goToNextPage()
 	{
-		let index = currentIndex + 1
+		let index = _currentIndex + 1
 		if index < (slides?.count)!
 		{
 			setPage(withIndex: index)
@@ -181,7 +184,7 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	
 	open func goToPreviousPage()
 	{
-		let index = currentIndex - 1
+		let index = _currentIndex - 1
 		if index >= 0
 		{
 			setPage(withIndex: index)
@@ -192,9 +195,9 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	{
 		if	let viewController = slideViewController(forPageIndex: index)
 		{
-			setViewControllers([viewController], direction: (index > currentIndex ? .forward : .reverse), animated: true, completion: nil)
+			setViewControllers([viewController], direction: (index > _currentIndex ? .forward : .reverse), animated: true, completion: nil)
 			
-			currentIndex = index
+			_currentIndex = index
 		}
 	}
 	
@@ -225,7 +228,7 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	{
 		if completed
 		{
-			currentIndex = indexOfSlideForViewController(viewController: (pageViewController.viewControllers?.last)!)
+			_currentIndex = indexOfSlideForViewController(viewController: (pageViewController.viewControllers?.last)!)
 		}
 	}
 	

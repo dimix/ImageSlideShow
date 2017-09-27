@@ -82,6 +82,8 @@ class ViewController: UIViewController {
 			controller.enableZoom = true
 			controller.controllerDidDismiss = {
 				debugPrint("Controller Dismissed")
+				
+				debugPrint("last index viewed: \(controller.currentIndex)")
 			}
 			
 		}
