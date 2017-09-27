@@ -88,11 +88,7 @@ Current version is compatible with:
 Are you searching for an old (unsupported) version? Check out:
 
 * [Swift 2.3](https://github.com/dimix/ImageSlideShow/tree/feature/swift2.3)
-* [Swift 3](https://github.com/dimix/ImageSlideShow/tree/feature/swift3)
-
-## To Do
-
-* Create module
+* [Swift 3](https://github.com/dimix/ImageSlideShow/tree/tags/0.1.2)
 
 ## Credits
 
