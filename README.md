@@ -81,7 +81,7 @@ You can use the Demo project to watch details.
 
 Current version is compatible with:
 
-* Swift 4.0+
+* Swift 4.0
 * XCode 9
 * iOS 9 or later
 
