@@ -7,7 +7,7 @@
 
 import UIKit
 
-@objc public protocol ImageSlideShowProtocol
+public protocol ImageSlideShowProtocol
 {
 	func slideIdentifier() -> String
 	func image(completion: @escaping (_ image:UIImage?, _ error:Error?) -> Void)
@@ -155,7 +155,7 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	
 	//	MARK: Actions
 	
-	open func dismiss(sender:AnyObject?)
+	@objc open func dismiss(sender:AnyObject?)
 	{
 		dismiss(animated: true, completion: nil)
 		

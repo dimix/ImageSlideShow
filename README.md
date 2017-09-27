@@ -21,7 +21,7 @@ You can use this class on iPhone and iPad as well.
 $ gem install cocoapods
 ```
 
-> CocoaPods 1.0.1+ is required to build ImageSlideShow (along with Swift 3 and Xcode 8).
+> CocoaPods 1.0.1+ is required to build ImageSlideShow (along with Swift 4 and Xcode 8).
 
 #### Podfile
 
@@ -81,12 +81,14 @@ You can use the Demo project to watch details.
 
 Current version is compatible with:
 
-* Swift 3.0+
+* Swift 4.0+
+* XCode 9
 * iOS 9 or later
 
 Are you searching for an old (unsupported) version? Check out:
 
 * [Swift 2.3](https://github.com/dimix/ImageSlideShow/tree/feature/swift2.3)
+* [Swift 3](https://github.com/dimix/ImageSlideShow/tree/feature/swift3)
 
 ## To Do
 
