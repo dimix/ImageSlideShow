@@ -86,6 +86,18 @@ class ViewController: UIViewController {
 				debugPrint("last index viewed: \(controller.currentIndex)")
 			}
 			
+			controller.slideShowViewDidLoad = {
+				debugPrint("Did Load")
+			}
+			
+			controller.slideShowViewWillAppear = { animated in
+				debugPrint("Will Appear Animated: \(animated)")
+			}
+			
+			controller.slideShowViewDidAppear = { animated in
+				debugPrint("Did Appear Animated: \(animated)")
+			}
+			
 		}
 	}
 }

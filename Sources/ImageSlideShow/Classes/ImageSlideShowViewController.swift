@@ -40,9 +40,18 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	open var enableZoom:Bool = false
 	open var statusBarStyle:UIStatusBarStyle = .lightContent
 	open var navigationBarTintColor:UIColor = .white
-	open var currentIndex: Int {
+	
+	//	Current index and slide
+	public var currentIndex: Int {
 		return _currentIndex
 	}
+	public var currentSlide: ImageSlideShowProtocol? {
+		return slides?[currentIndex]
+	}
+	
+	public var slideShowViewDidLoad: (()->())?
+	public var slideShowViewWillAppear: ((_ animated: Bool)-> ())?
+	public var slideShowViewDidAppear: ((_ animated: Bool)-> ())?
 	
 	open var controllerDidDismiss:() -> Void = {}
 	open var stepAnimate:((_ offset:CGFloat, _ viewController:UIViewController) -> Void) = { _,_ in }
@@ -147,6 +156,8 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 		}
 		
 		view.gestureRecognizers = gestures
+		
+		slideShowViewDidLoad?()
 	}
 	
 	override open func viewWillAppear(_ animated: Bool)
@@ -154,6 +165,15 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 		super.viewWillAppear(animated)
 		
 		setPage(withIndex: initialIndex)
+		
+		slideShowViewWillAppear?(animated)
+	}
+	
+	override open func viewDidAppear(_ animated: Bool)
+	{
+		super.viewDidAppear(animated)
+		
+		slideShowViewDidAppear?(animated)
 	}
 	
 	//	MARK: Actions
