@@ -59,6 +59,12 @@ Currently only iOS is supported.
 ## How to Use
 
 #### 1. Import ImageSlideShowSwift module
+
+```swift
+Import ImageSlideShowSwift
+```
+
+ImageSlideShowSwift
 #### 2. Instantiate the controller
 
 ```swift
