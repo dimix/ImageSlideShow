@@ -10,7 +10,7 @@ import UIKit
 public protocol ImageSlideShowProtocol
 {
 	func slideIdentifier() -> String
-	func image(completion: @escaping (_ image:UIImage?, _ error:Error?) -> Void)
+    func image(completion: @escaping (_ image:UIImage?,_ imageDescription:String?, _ error:Error?) -> Void)
 }
 
 class ImageSlideShowCache: NSCache<AnyObject, AnyObject>
