@@ -12,6 +12,7 @@ class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 	@IBOutlet weak var scrollView:UIScrollView?
 	@IBOutlet weak var imageView:UIImageView?
 	@IBOutlet weak var loadingIndicatorView:UIActivityIndicatorView?
+    @IBOutlet weak var imageDescription: UILabel?
 	
 	var slide:ImageSlideShowProtocol?
 	var enableZoom = false
@@ -32,11 +33,12 @@ class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 		scrollView?.isHidden = true
 		loadingIndicatorView?.startAnimating()
 		
-		slide?.image(completion: { (image, error) -> Void in
+		slide?.image(completion: { (image,imageDescription,error) -> Void in
 			
 			DispatchQueue.main.async {
 			
 				self.imageView?.image = image
+                self.imageDescription?.text = imageDescription
 				self.loadingIndicatorView?.stopAnimating()
 				self.scrollView?.isHidden = false
 				
