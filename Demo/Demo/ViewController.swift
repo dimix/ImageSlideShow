@@ -8,11 +8,10 @@
 
 import UIKit
 
-//	Very bad Class, but just for Demo ;-)
-
-class Image:NSObject, ImageSlideShowProtocol
-{
-	fileprivate let url:URL
+// Very bad Class, but just for Demo ;-)
+class Image: NSObject, ImageSlideShowProtocol {
+	
+	private let url:URL
 	
 	init(url:URL) {
 		self.url = url
@@ -44,21 +43,15 @@ class Image:NSObject, ImageSlideShowProtocol
 
 class ViewController: UIViewController {
 
-	fileprivate var images:[Image] = []
+	private var images: [Image] = []
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
 		self.generateImages()
 	}
-
-	override func didReceiveMemoryWarning() {
-		super.didReceiveMemoryWarning()
-		// Dispose of any resources that can be recreated.
-	}
 	
-	fileprivate func generateImages()
-	{
+	private func generateImages() {
 		let scale:Int = Int(UIScreen.main.scale)
 		let height:Int = Int(view.frame.size.height) * scale
 		let width:Int = Int(view.frame.size.width) * scale
@@ -73,8 +66,7 @@ class ViewController: UIViewController {
 		]
 	}
 	
-	@IBAction func presentSlideShow(_ sender:AnyObject?)
-	{
+	@IBAction func presentSlideShow(_ sender:AnyObject?) {
 		ImageSlideShowViewController.presentFrom(self){ [weak self] controller in
 			
 			controller.dismissOnPanGesture = true
@@ -82,7 +74,6 @@ class ViewController: UIViewController {
 			controller.enableZoom = true
 			controller.controllerDidDismiss = {
 				debugPrint("Controller Dismissed")
-				
 				debugPrint("last index viewed: \(controller.currentIndex)")
 			}
 			
