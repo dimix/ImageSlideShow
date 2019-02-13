@@ -7,23 +7,19 @@
 
 import UIKit
 
-class ImageSlideViewController: UIViewController, UIScrollViewDelegate
-{
-	@IBOutlet weak var scrollView:UIScrollView?
-	@IBOutlet weak var imageView:UIImageView?
-	@IBOutlet weak var loadingIndicatorView:UIActivityIndicatorView?
+class ImageSlideViewController: UIViewController, UIScrollViewDelegate {
+	@IBOutlet weak var scrollView			: UIScrollView?
+	@IBOutlet weak var imageView			: UIImageView?
+	@IBOutlet weak var loadingIndicatorView	: UIActivityIndicatorView?
 	
-	var slide:ImageSlideShowProtocol?
-	var enableZoom = false
+	var slide			: ImageSlideShowProtocol?
+	var enableZoom		: Bool = false
+	var willBeginZoom	: () -> Void = {}
 	
-	var willBeginZoom:() -> Void = {}
-	
-	override func viewDidLoad()
-	{
+	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		if enableZoom
-		{
+		if enableZoom {
 			scrollView?.maximumZoomScale = 2.0
 			scrollView?.minimumZoomScale = 1.0
 			scrollView?.zoomScale = 1.0
@@ -33,24 +29,18 @@ class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 		loadingIndicatorView?.startAnimating()
 		
 		slide?.image(completion: { (image, error) -> Void in
-			
 			DispatchQueue.main.async {
-			
 				self.imageView?.image = image
 				self.loadingIndicatorView?.stopAnimating()
 				self.scrollView?.isHidden = false
-				
 			}
-			
 		})
     }
 	
-	override func viewDidDisappear(_ animated: Bool)
-	{
+	override func viewDidDisappear(_ animated: Bool) {
 		super.viewDidDisappear(animated)
 		
-		if enableZoom
-		{
+		if enableZoom {
 			//	Reset zoom scale when the controller is hidden
 		
 			scrollView?.zoomScale = 1.0
@@ -59,18 +49,11 @@ class ImageSlideViewController: UIViewController, UIScrollViewDelegate
 	
 	//	MARK: UIScrollViewDelegate
 	
-	func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?)
-	{
+	func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
 		willBeginZoom()
 	}
 	
-	func viewForZooming(in scrollView: UIScrollView) -> UIView?
-	{
-		if enableZoom
-		{
-			return imageView
-		}
-		
-		return nil
+	func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+		return enableZoom ? imageView : nil
 	}
 }
