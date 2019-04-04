@@ -9,7 +9,7 @@ import UIKit
 
 class ImageSlideShowNavigationController: UINavigationController
 {
-	override var childViewControllerForStatusBarStyle: UIViewController?
+	override var childForStatusBarStyle: UIViewController?
 	{
 		return topViewController
 	}

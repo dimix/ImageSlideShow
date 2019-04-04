@@ -4,7 +4,7 @@
 ![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)
 
 # Swift ImageSlideShow for iOS
-ImageSlideShow is a simple Slideshow for images (Picture, Photos) for your iOS apps written in Swift 4.
+ImageSlideShow is a simple Slideshow for images (Picture, Photos) for your iOS apps written in Swift 5.
 You can use this class on iPhone and iPad as well.
 
 ![alt tag](https://raw.githubusercontent.com/dimix/ImageSlideShow/e6e9a62db2b4c82b58d5b298ef6802c0a8125970/demo.gif)
@@ -21,7 +21,7 @@ You can use this class on iPhone and iPad as well.
 $ gem install cocoapods
 ```
 
-> CocoaPods 1.0.1+ is required to build ImageSlideShow (along with Swift 4 and Xcode 8).
+> CocoaPods 1.0.1+ is required to build ImageSlideShow (along with Swift 5 and Xcode 10).
 
 #### Podfile
 
@@ -87,14 +87,15 @@ You can use the Demo project to watch details.
 
 Current version is compatible with:
 
-* Swift 4.0
-* XCode 9
+* Swift 5.0
+* XCode 10
 * iOS 9 or later
 
 Are you searching for an old (unsupported) version? Check out:
 
 * [Swift 2.3](https://github.com/dimix/ImageSlideShow/tree/feature/swift2.3)
 * [Swift 3](https://github.com/dimix/ImageSlideShow/tree/tags/0.1.2)
+* [Swift 4](https://github.com/dimix/ImageSlideShow/tree/tags/0.1.5)
 
 ## Credits
 

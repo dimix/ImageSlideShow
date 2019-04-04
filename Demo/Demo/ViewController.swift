@@ -10,11 +10,13 @@ import UIKit
 
 //	Very bad Class, but just for Demo ;-)
 
-class Image:NSObject, ImageSlideShowProtocol
+class Image: NSObject, ImageSlideShowProtocol
 {
-	fileprivate let url:URL
+	private let url: URL
+	let title: String?
 	
-	init(url:URL) {
+	init(title: String, url: URL) {
+		self.title = title
 		self.url = url
 	}
 	
@@ -64,12 +66,12 @@ class ViewController: UIViewController {
 		let width:Int = Int(view.frame.size.width) * scale
 		
 		images = [
-			Image(url: URL(string: "https://dummyimage.com/\(width)x\(height)/09a/fff.png&text=Image+1")!),
-			Image(url: URL(string: "https://dummyimage.com/\(600)x\(600)/09b/fff.png&text=Image+2")!),
-			Image(url: URL(string: "https://dummyimage.com/\(width)x\(height)/09c/fff.png&text=Image+3")!),
-			Image(url: URL(string: "https://dummyimage.com/\(600)x\(600)/09d/fff.png&text=Image+4")!),
-			Image(url: URL(string: "https://dummyimage.com/\(width)x\(height)/09e/fff.png&text=Image+5")!),
-			Image(url: URL(string: "https://dummyimage.com/\(width)x\(height)/09f/fff.png&text=Image+6")!),
+			Image(title: "Image 1", url: URL(string: "https://dummyimage.com/\(width)x\(height)/09a/fff.png&text=Image+1")!),
+			Image(title: "Image 2", url: URL(string: "https://dummyimage.com/\(600)x\(600)/09b/fff.png&text=Image+2")!),
+			Image(title: "Image 3", url: URL(string: "https://dummyimage.com/\(width)x\(height)/09c/fff.png&text=Image+3")!),
+			Image(title: "Image 4", url: URL(string: "https://dummyimage.com/\(600)x\(600)/09d/fff.png&text=Image+4")!),
+			Image(title: "Image 5", url: URL(string: "https://dummyimage.com/\(width)x\(height)/09e/fff.png&text=Image+5")!),
+			Image(title: "Image 6", url: URL(string: "https://dummyimage.com/\(width)x\(height)/09f/fff.png&text=Image+6")!),
 		]
 	}
 	
