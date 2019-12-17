@@ -93,7 +93,7 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	class func imageSlideShowNavigationController() -> ImageSlideShowNavigationController
 	{
 		let controller = ImageSlideShowViewController.imageSlideShowStoryboard.instantiateViewController(withIdentifier: "ImageSlideShowNavigationController") as! ImageSlideShowNavigationController
-		controller.modalPresentationStyle = .overCurrentContext
+		controller.modalPresentationStyle = .overFullScreen
 		controller.modalPresentationCapturesStatusBarAppearance = true
 		
 		return controller
@@ -380,9 +380,9 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 				UIView.animate(withDuration: 0.2,
 				                           delay: 0.0,
 				                           options: .beginFromCurrentState,
-				                           animations: { () -> Void in
+				                           animations: {
 											
-											self.presentingViewController?.view.transform = CGAffineTransform.identity
+											self.presentingViewController?.view.transform = .identity
 											
 											viewController.imageView?.center = self.originPanViewCenter
 											viewController.imageView?.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
@@ -401,19 +401,17 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 				UIView.animate(withDuration: 0.3,
 				                           delay: 0.0,
 				                           options: .beginFromCurrentState,
-				                           animations: { () -> Void in
+				                           animations: {
 											
-											self.presentingViewController?.view.transform = CGAffineTransform.identity
+											self.presentingViewController?.view.transform = .identity
 											
-											if var frame = viewController.imageView?.frame
-											{
-												frame.origin.y = (velocity > 0 ? self.view.frame.size.height : -frame.size.height)
-												viewController.imageView?.frame = frame
-											}
-											
+											var frame = viewController.imageView?.frame ?? .zero
+											frame.origin.y = (velocity > 0 ? self.view.frame.size.height*2 : -self.view.frame.size.height)
+											viewController.imageView?.transform = .identity
+											viewController.imageView?.frame = frame
 											viewController.imageView?.alpha = 0.0
 											
-					}, completion: { (completed:Bool) -> Void in
+					}, completion: { completed in
 						
 						completion()
 						

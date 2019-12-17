@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -24,7 +22,7 @@
             <objects>
                 <navigationController storyboardIdentifier="ImageSlideShowNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="PJ3-gM-bi3" customClass="ImageSlideShowNavigationController" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="bdJ-bZ-9av">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -44,14 +42,14 @@
                         <viewControllerLayoutGuide type="bottom" id="P3f-r7-4bc"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="rX4-OF-GMN">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EIs-p7-gMV">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
                                     <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IB1-fE-kMh">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                     </imageView>
                                 </subviews>
@@ -60,20 +58,20 @@
                                     <constraint firstItem="IB1-fE-kMh" firstAttribute="centerX" secondItem="EIs-p7-gMV" secondAttribute="centerX" id="9Kd-Ah-ErO"/>
                                     <constraint firstItem="IB1-fE-kMh" firstAttribute="centerY" secondItem="EIs-p7-gMV" secondAttribute="centerY" id="KJW-3h-fGO"/>
                                     <constraint firstItem="IB1-fE-kMh" firstAttribute="leading" secondItem="EIs-p7-gMV" secondAttribute="leading" id="SS8-EM-zyU"/>
-                                    <constraint firstAttribute="bottom" secondItem="IB1-fE-kMh" secondAttribute="bottom" id="TT6-LE-DUo"/>
                                     <constraint firstAttribute="trailing" secondItem="IB1-fE-kMh" secondAttribute="trailing" id="fS2-V5-2Ai"/>
+                                    <constraint firstAttribute="bottom" secondItem="IB1-fE-kMh" secondAttribute="bottom" id="z3c-y6-cKT"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="delegate" destination="ac2-3e-xTy" id="TmW-tT-GfK"/>
                                 </connections>
                             </scrollView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="cmx-69-4Vi">
-                                <rect key="frame" x="177.5" y="323.5" width="20" height="20"/>
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="P3f-r7-4bc" firstAttribute="top" secondItem="EIs-p7-gMV" secondAttribute="bottom" id="0RG-Sd-Zth"/>
+                            <constraint firstAttribute="bottom" secondItem="EIs-p7-gMV" secondAttribute="bottom" id="0RG-Sd-Zth"/>
                             <constraint firstItem="EIs-p7-gMV" firstAttribute="top" secondItem="rX4-OF-GMN" secondAttribute="top" id="24a-ig-IyD"/>
                             <constraint firstAttribute="trailing" secondItem="EIs-p7-gMV" secondAttribute="trailing" id="Rte-Pd-CZ3"/>
                             <constraint firstItem="cmx-69-4Vi" firstAttribute="centerY" secondItem="rX4-OF-GMN" secondAttribute="centerY" id="X1U-pq-oPe"/>
@@ -90,7 +88,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AbK-do-KjR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="789.60000000000002" y="-319.79010494752629"/>
+            <point key="canvasLocation" x="788.40579710144937" y="-320.08928571428572"/>
         </scene>
     </scenes>
 </document>
