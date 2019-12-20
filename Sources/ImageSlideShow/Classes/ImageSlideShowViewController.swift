@@ -68,22 +68,26 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 	fileprivate var _currentIndex: Int = 0
 	fileprivate let slidesViewControllerCache = ImageSlideShowCache()
 	
-	override open var preferredStatusBarStyle:UIStatusBarStyle
+	override open var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+		return .fade
+	}
+	
+	override open var preferredStatusBarStyle: UIStatusBarStyle
 	{
 		return statusBarStyle
 	}
 	
-	override open var prefersStatusBarHidden:Bool
+	override open var prefersStatusBarHidden: Bool
 	{
 		return navigationBarHidden
 	}
 	
-	override open var shouldAutorotate:Bool
+	override open var shouldAutorotate: Bool
 	{
 		return true
 	}
 	
-	override open var supportedInterfaceOrientations:UIInterfaceOrientationMask
+	override open var supportedInterfaceOrientations: UIInterfaceOrientationMask
 	{
 		return .all
 	}
@@ -231,17 +235,10 @@ open class ImageSlideShowViewController: UIPageViewController, UIPageViewControl
 		guard hideNavigationBarOnAction else { return }
 		
 		navigationBarHidden = !visible
+
+		navigationController?.setNavigationBarHidden(!visible, animated: true)
 		
-		UIView.animate(withDuration: 0.23,
-		                           delay: 0.0,
-		                           options: .beginFromCurrentState,
-		                           animations: { () -> Void in
-									
-									self.navigationController?.navigationBar.alpha = (visible ? 1.0 : 0.0)
-									
-			}, completion: nil)
-		
-		self.setNeedsStatusBarAppearanceUpdate()
+		UIView.animate(withDuration: 0.23) { self.setNeedsStatusBarAppearanceUpdate() }
 	}
 	
 	// MARK: UIPageViewControllerDataSource
