@@ -17,7 +17,8 @@ let package = Package(
     targets: [
         .target(
             name: "ImageSlideShow",
-            dependencies: []
+            dependencies: [],
+            resources: [.process("Storyboard")]
 		)
     ]
 )
